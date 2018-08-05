@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "894617050164",
+    "firebase_url": "https://hwagae4.firebaseio.com",
+    "project_id": "hwagae4",
+    "storage_bucket": "hwagae4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:894617050164:android:8f47a2a24d185da5",
+        "android_client_info": {
+          "package_name": "www.hwagae.com.hwagae"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "894617050164-sv4d9vb1hgbno1f02diehd52f0b1kq94.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsGSIg4MzWeHDiUuSY5x2oAPSMdPzr7Fc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
