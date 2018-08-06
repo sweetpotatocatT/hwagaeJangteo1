@@ -9,7 +9,18 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+
 public class JoinActivity extends AppCompatActivity {
+
+/*
+// 데이터베이스에 메시지 쓰기
+ FirebaseDatabase database =
+ FirebaseDatabase.getInstance ();
+ DatabaseReference myRef = 데이터베이스 입니다.getReference ( "message" );
+ myRef.setValue("Hello, World!");
+*/
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
