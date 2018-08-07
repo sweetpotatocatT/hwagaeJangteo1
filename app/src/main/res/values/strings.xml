@@ -5,4 +5,7 @@
     <string name="facebook_application_id" translatable="false">YOUR_APP_ID</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fbYOUR_APP_ID</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="facebook_app_id">1212721358868606</string>
+    <string name="fb_login_protocol_scheme">fb1212721358868606</string>
+
 </resources>
