@@ -17,6 +17,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.Login;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -27,6 +28,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import android.support.v4.app.Fragment;
+import android.widget.TextView;
 
 
 import java.util.Arrays;
@@ -37,6 +39,8 @@ public class LoginActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 123;
     CallbackManager callbackManager;
     LoginButton loginButton;
+    TextView tvJoinus;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
@@ -152,6 +156,16 @@ public class LoginActivity extends AppCompatActivity {
 
 
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+
+        tvJoinus = findViewById(R.id.tvJoinus);
+        tvJoinus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(LoginActivity.this, MainViewActivity.class);
+                startActivity(it);
+
+            }
+        });
     }
 
 
