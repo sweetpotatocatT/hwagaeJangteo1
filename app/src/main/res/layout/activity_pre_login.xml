@@ -14,7 +14,9 @@
         android:text="로그인"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:clickable="true" />
+    <!-- 세빛아 여기에 화개장터 이미지 넣으면 돼 -->
 
     <ImageView
         android:id="@+id/imageView"
