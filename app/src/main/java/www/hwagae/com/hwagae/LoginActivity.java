@@ -153,9 +153,9 @@ public class LoginActivity extends AppCompatActivity {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
 
-
-
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+
+
 
         tvJoinus = findViewById(R.id.tvJoinus);
         tvJoinus.setOnClickListener(new View.OnClickListener() {

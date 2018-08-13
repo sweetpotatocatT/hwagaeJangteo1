@@ -8,5 +8,8 @@
     <string name="facebook_app_id">1212721358868606</string>
     <string name="fb_login_protocol_scheme">fb1212721358868606</string>
     <string name="title_activity_main_view">MainViewActivity</string>
+    <string name="title_activity_chat">ChatActivity</string>
+    <string name="title_activity_chat_room">ChatRoomActivity</string>
+    <string name="title_activity_pr_login">PrLoginActivity</string>
 
 </resources>
