@@ -53,7 +53,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                 = new ArrayAdapter<String>(this, R.layout.item, R.id.tvChat);
         lvChatlist.setAdapter(adapter);
 
-        // 데이터 받아오기 및 어댑터 데이터 추가 및 삭제 .. 리스너 관리
+        // 데이터 받아오기 및 어댑터 데이터 추가 및 삭제, 리스너 관리
         databaseReference.child("chat").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {

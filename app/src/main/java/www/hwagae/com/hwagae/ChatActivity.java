@@ -1,9 +1,11 @@
 package www.hwagae.com.hwagae;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -11,7 +13,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.facebook.Profile;
 import com.google.firebase.database.ChildEventListener;
@@ -22,12 +26,15 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private String CHAT_NAME;
     private String USER_NAME;
+    private String USER_ID;
+    private String PARTNER_NAME;
 
+    private LinearLayout linearRequest;
     private ListView lvChat;
     private EditText rqText;
     private Button btnRequest;
+    private Button rqBalance, rqAddress, rqFinish;
 
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = firebaseDatabase.getReference();
@@ -44,11 +51,23 @@ public class ChatActivity extends AppCompatActivity {
         rqText = findViewById(R.id.rqText);
         btnRequest = findViewById(R.id.btnRequest);
 
+        linearRequest = findViewById(R.id.linearRequest);
+        rqBalance = findViewById(R.id.rqBalance);       // 계좌 전송 : 저장된 계좌 전송
+        rqAddress = findViewById(R.id.rqAddress);       // 주소 전송 : 저장된 주소 전송
+        rqFinish = findViewById(R.id.rqFinish);         // 거래 완료 : EditText입력창과 전송버튼 안보이게
+
         /*
         페이스북 연동 로그인 후, 받아온 유저 이름 저장
          */
         USER_NAME
                 = (Profile.getCurrentProfile().getFirstName() + Profile.getCurrentProfile().getLastName()).toString();
+
+        /*
+        페이스북 연동 로그인 후, 받아온 유저 아이디 저장 -> 이름이 같아도 무결성 유지를 위해
+         */
+        USER_ID
+                = (Profile.getCurrentProfile().getId()).toString();
+
 
         // 채팅방 입장 -> 메소드 구현
         openChat(USER_NAME);
@@ -69,7 +88,52 @@ public class ChatActivity extends AppCompatActivity {
                 rqText.setText("");         // 입력창 초기화
             }
         });
+
+        rqBalance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 내 정보 클래스에서 저장된 계좌번호가 없다면 계좌번호를 입력해달라는 Toast 넣기
+                Toast.makeText(ChatActivity.this, "계좌번호를 입력해주세요.",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        rqAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 내 정보 클래스에서 저장된 주소가 없다면 주소를 입력해달라는 Toast 넣기
+                Toast.makeText(ChatActivity.this, "주소를 입력해주세요.",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        rqFinish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 상대방과의 대화를 끝내기 -> EditText 창과 전송Button 없애기
+                AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
+
+                builder.setTitle("대화 종료 상자")
+                        .setMessage(PARTNER_NAME + "과의 대화를 종료하시겠습니까?")
+                        .setCancelable(false)
+                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // 확인 버튼 클릭시 EditText 입력창과 전송버튼 없애기
+                                linearRequest.setVisibility(View.GONE);
+                            }
+                        })
+                        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                // 취소 버튼 클릭시 설정
+                                    dialog.cancel();
+                            }
+                        });
+            }
+        });
+
     }
+
+
 
     /*
     채팅 입력하는 화면
