@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".MypageActivity"
+    tools:layout_editor_absoluteY="81dp"
+    tools:showIn="@layout/activity_mypage">
+
+    <com.facebook.login.widget.ProfilePictureView
+        android:id="@+id/pfPicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravitity="center_horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/rpName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="27dp"
+        android:text="홍길동"
+        app:layout_constraintEnd_toEndOf="@+id/pfPicture"
+        app:layout_constraintTop_toBottomOf="@+id/pfPicture" />
+
+    <TextView
+        android:id="@+id/rpId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="아이디"
+        app:layout_constraintStart_toStartOf="@+id/rpName"
+        app:layout_constraintTop_toBottomOf="@+id/rpName" />
+</android.support.constraint.ConstraintLayout>

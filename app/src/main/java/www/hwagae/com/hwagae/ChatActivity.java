@@ -72,6 +72,7 @@ public class ChatActivity extends AppCompatActivity {
         // 채팅방 입장 -> 메소드 구현
         openChat(USER_NAME);
 
+        // 채팅전송 버튼 온클릭 리스터
         btnRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,6 +90,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        // 계좌번호 전송
         rqBalance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,6 +99,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        // 주소 전송
         rqAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,6 +108,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        // 거래 완료
         rqFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
