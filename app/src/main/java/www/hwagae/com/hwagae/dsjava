@@ -1,0 +1,15 @@
+TextView TextViewName;
+TextView textViewId;
+com.facebook.login.widget.ProfilePictureView profilePictureView;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main_view);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        TextViewName = findViewById(R.id.TextViewName);
+        textViewId =  findViewById(R.id.textViewId);
+        profilePictureView = findViewById(R.id.ProfilePictrue);
+        TextViewName.setText(Profile.getCurrentProfile().getFirstName() + Profile.getCurrentProfile().getLastName());
+        textViewId.setText(Profile.getCurrentProfile().getId());
+        profilePictureView.setProfileId(Profile.getCurrentProfile().getId());
