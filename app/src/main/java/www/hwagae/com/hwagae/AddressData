@@ -1,0 +1,30 @@
+package www.hwagae.com.hwagae;
+
+
+public class AddressData {
+
+    private String Addressinfo;
+
+
+
+   public AddressData() {
+    }
+
+
+    public AddressData(String Addressinfo, String aa) {
+        this.Addressinfo = Addressinfo;
+
+    }
+
+
+    public void setAddressinfo(String Addressinfo) {
+        this.Addressinfo = Addressinfo;
+    }
+
+
+    public String getAddressinfo() {
+        return Addressinfo;
+    }
+
+
+}
