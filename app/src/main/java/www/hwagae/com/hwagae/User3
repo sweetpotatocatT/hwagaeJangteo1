@@ -1,0 +1,19 @@
+package www.hwagae.com.hwagae;
+
+public class User3 {
+
+    public String Addressinfo;
+
+
+    public User3() {
+        // Default constructor required for calls to DataSnapshot.getValue(User.class)
+    }
+
+    public User3(String Addressinfo) {
+        this.Addressinfo = Addressinfo;
+
+    }
+
+
+
+}
