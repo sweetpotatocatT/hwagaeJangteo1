@@ -1,0 +1,34 @@
+package www.hwagae.com.hwagae;
+
+
+public class AccountData {
+
+    private String Accountinfo;   
+    private String Bankinfo;    
+  
+   public AccountData() {
+    }
+
+   
+    public AccountData(String Accountinfo, String Bankinfo) {
+        this.Accountinfo = Accountinfo;
+        this.Bankinfo = Bankinfo;
+    }
+
+  
+    public void setAccountinfo(String Accountinfo) {
+        this.Accountinfo = Accountinfo;
+    }
+
+    public void setBankinfo(String Bankinfo) {
+        this.Bankinfo = Bankinfo;
+    }
+
+    public String getAccountinfo() {
+        return Accountinfo;
+    }
+
+    public String getBankinfo() {
+        return Bankinfo;
+    }
+}
