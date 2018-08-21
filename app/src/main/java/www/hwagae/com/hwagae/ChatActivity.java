@@ -36,6 +36,9 @@ public class ChatActivity extends AppCompatActivity {
     private Button btnRequest;
     private Button rqBalance, rqAddress, rqFinish;
 
+    // 채팅 ArrayAdapter 설정 -> 리스트뷰에 넣어주기 위함
+    ArrayAdapter<String> adapter;
+
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = firebaseDatabase.getReference();
 
@@ -56,6 +59,10 @@ public class ChatActivity extends AppCompatActivity {
         rqAddress = findViewById(R.id.rqAddress);       // 주소 전송 : 저장된 주소 전송
         rqFinish = findViewById(R.id.rqFinish);         // 거래 완료 : EditText입력창과 전송버튼 안보이게
 
+        adapter =
+                new ArrayAdapter<>(this, R.layout.item, R.id.tvChat);
+        lvChat.setAdapter(adapter);
+
         /*
         페이스북 연동 로그인 후, 받아온 유저 이름 저장
          */
@@ -70,7 +77,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
         // 채팅방 입장 -> 메소드 구현
-        openChat(USER_NAME);
+//        openChat(USER_NAME);
 
         // 채팅전송 버튼 온클릭 리스터
         btnRequest.setOnClickListener(new View.OnClickListener() {
@@ -80,13 +87,49 @@ public class ChatActivity extends AppCompatActivity {
                 if(rqText.getText().toString().equals("")) {
                     return;
                 }
+
                 // USER_NAME에 해당하는 사람이 친 채팅을 chat에 넣기
                 ChatData chat = new ChatData(USER_NAME, rqText.getText().toString());
+                // Database에 message라는 root로 chat 푸시
+                databaseReference.child("message").push().setValue(chat);
+                rqText.setText("");         // 입력창 초기화
+
 
                 // RealTime Database에 Chat - USER_NAME 넣고 채팅친 것 value로 넣기
                 // 기본적으로 데이터베이스에 넣을 때 형태는 Key, Value 맵 형태로 넣어진다.
-                databaseReference.child("chat").child(USER_NAME).push().setValue(chat);
-                rqText.setText("");         // 입력창 초기화
+
+            }
+        });
+
+        // 데이터 받아오기 및 어댑터에 데이터 추가 및 삭제 등 .. 리스터 관리
+        databaseReference.child("message").addChildEventListener(new ChildEventListener() {
+            // Child 값 넣는 메소드
+            // Child : 데이터베이스에서 하위 항목들
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                ChatData chatData = dataSnapshot.getValue(ChatData.class);
+                adapter.add(chatData.getUserName() + " : " + chatData.getMessage());
+                // addMessage(dataSnapshot, adapter);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
 
@@ -135,6 +178,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+
     }
 
 
@@ -144,51 +188,13 @@ public class ChatActivity extends AppCompatActivity {
     >> 추후에 USER 본인이면 오른쪽 배치, 아니면 왼쪽 배치 고려할 것
     >> 그리고 유저 이름이랑 채팅 같이 나올 수 있게 ! -> 카톡처럼
      */
-    private void addMessage(DataSnapshot dataSnapshot, ArrayAdapter<String> adapter) {
+    /*private void addMessage(DataSnapshot dataSnapshot, ArrayAdapter<String> adapter) {
         ChatData chatData = dataSnapshot.getValue(ChatData.class);
         adapter.add(chatData.getUserName() + " : " + chatData.getMessage());
-    }
+    }*/
 
     /*
     채팅 글 지우는 항목도 있었는데 혹시나 발뺌하는 일 생길까봐 일부러 추가 안함
      */
-
-    private void openChat(String chatName) {
-        // 리스트 어댑터 세팅
-        final ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(this, R.layout.item, R.id.tvChat);
-        lvChat.setAdapter(adapter);
-
-        // 데이터 받아오기 및 어댑터에 데이터 추가 및 삭제 등 .. 리스터 관리
-        databaseReference.child("chat").child(chatName).addChildEventListener(new ChildEventListener() {
-            // Child 값 넣는 메소드
-            // Child : 데이터베이스에서 하위 항목들
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                addMessage(dataSnapshot, adapter);
-                Log.d("LOG", "s:" + s);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
 
 }

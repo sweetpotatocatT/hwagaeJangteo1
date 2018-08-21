@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/toMain"
+        android:orderInCategory="100"
+        android:title="메인으로 이동"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/ChatList"
+        android:orderInCategory="100"
+        android:title="채팅방 목록"
+        app:showAsAction="never" />
+
+    <!-- 로그아웃 메뉴 누르면 LoginActivity 화면으로 넘어가게 해서 Logout Button 클릭하게끔 -->
+    <item
+        android:id="@+id/Logout"
+        android:orderInCategory="100"
+        android:title="채팅방 나가기"
+        app:showAsAction="never" />
+</menu>

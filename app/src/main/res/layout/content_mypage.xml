@@ -13,29 +13,122 @@
     <com.facebook.login.widget.ProfilePictureView
         android:id="@+id/pfPicture"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravitity="center_horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="180dp"
+        android:layout_gravity="center">
 
-    <TextView
-        android:id="@+id/rpName"
+    </com.facebook.login.widget.ProfilePictureView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="아이디:" />
+
+        <TextView
+            android:id="@+id/rpId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="아이디" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="이름:" />
+
+        <TextView
+            android:id="@+id/rpName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="홍길동" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/rpAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="계좌"
+            android:visibility="visible" />
+
+        <Button
+            android:id="@+id/rpAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="주소" />
+
+        <Button
+            android:id="@+id/rpChatting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="1:1 채팅"
+            android:visibility="visible" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rpBank"
+            android:hint="은행"
+            />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rpAccountnumber"
+            android:hint="계좌"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rpSave"
+            android:text="저장"
+            />
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="27dp"
-        android:text="홍길동"
-        app:layout_constraintEnd_toEndOf="@+id/pfPicture"
-        app:layout_constraintTop_toBottomOf="@+id/pfPicture" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/rpId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="아이디"
-        app:layout_constraintStart_toStartOf="@+id/rpName"
-        app:layout_constraintTop_toBottomOf="@+id/rpName" />
+        <ListView
+            android:id="@+id/lvMyWrite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <ListView
+            android:id="@+id/lvMyLike"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+    </LinearLayout>
 </LinearLayout>

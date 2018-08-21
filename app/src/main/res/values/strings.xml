@@ -12,5 +12,7 @@
     <string name="title_activity_chat_room">ChatRoomActivity</string>
     <string name="title_activity_pr_login">PrLoginActivity</string>
     <string name="title_activity_mypage">MypageActivity</string>
+    <string name="title_activity_clickitem">ClickitemActivity</string>
+    <string name="title_activity_itemview">ItemviewActivity</string>
 
 </resources>

@@ -49,16 +49,17 @@ public class ChatRoomActivity extends AppCompatActivity {
 
     private void showChatList() {
         // 채팅방 목록을 받아올 리스트 어댑터 세팅
+        // 리스트뷰에는 상대방의 이름이 들어와야 한다.
         final ArrayAdapter<String> adapter
-                = new ArrayAdapter<String>(this, R.layout.item, R.id.tvChat);
+                = new ArrayAdapter<>(this, R.layout.item, R.id.tvChat);
         lvChatlist.setAdapter(adapter);
 
         // 데이터 받아오기 및 어댑터 데이터 추가 및 삭제, 리스너 관리
-        databaseReference.child("chat").addChildEventListener(new ChildEventListener() {
+        databaseReference.child("message").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.d("LOG", "dataSnapshot.getKey() : " + dataSnapshot.getKey());
-                adapter.add(dataSnapshot.getKey());
+                /*Log.d("LOG", "dataSnapshot.getKey() : " + dataSnapshot.getKey());*/
+                adapter.add(dataSnapshot.getChildren().toString());
             }
 
             @Override
@@ -66,9 +67,10 @@ public class ChatRoomActivity extends AppCompatActivity {
 
             }
 
+
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                adapter.remove(dataSnapshot.getChildren().toString());
             }
 
             @Override

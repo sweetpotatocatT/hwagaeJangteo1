@@ -44,7 +44,8 @@ public class MainViewActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.MyPage) {
-            return true;
+            Intent it = new Intent(MainViewActivity.this, MypageActivity.class);
+            startActivity(it);
         }
         if (id == R.id.ChatList) {
             Intent it = new Intent(this, ChatRoomActivity.class);
