@@ -73,7 +73,7 @@
         <activity
             android:name=".ItemviewActivity"
             android:label="@string/title_activity_itemview"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

@@ -20,6 +20,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
     private ListView lvChatlist;
 
+    // 채팅방에 키값 나오는거 수정
     // 파이어베이스 RealTime Database를 이용하기 위해서 선언해줘야함 !
     // -> Bundle Gradle(App level 15.0.1 확인)
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -51,7 +52,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         // 채팅방 목록을 받아올 리스트 어댑터 세팅
         // 리스트뷰에는 상대방의 이름이 들어와야 한다.
         final ArrayAdapter<String> adapter
-                = new ArrayAdapter<>(this, R.layout.item, R.id.tvChat);
+                = new ArrayAdapter<String>(this, R.layout.item, R.id.tvChat);
         lvChatlist.setAdapter(adapter);
 
         // 데이터 받아오기 및 어댑터 데이터 추가 및 삭제, 리스너 관리

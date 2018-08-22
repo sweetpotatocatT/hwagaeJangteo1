@@ -180,21 +180,4 @@ public class ChatActivity extends AppCompatActivity {
 
 
     }
-
-
-
-    /*
-    채팅 입력하는 화면
-    >> 추후에 USER 본인이면 오른쪽 배치, 아니면 왼쪽 배치 고려할 것
-    >> 그리고 유저 이름이랑 채팅 같이 나올 수 있게 ! -> 카톡처럼
-     */
-    /*private void addMessage(DataSnapshot dataSnapshot, ArrayAdapter<String> adapter) {
-        ChatData chatData = dataSnapshot.getValue(ChatData.class);
-        adapter.add(chatData.getUserName() + " : " + chatData.getMessage());
-    }*/
-
-    /*
-    채팅 글 지우는 항목도 있었는데 혹시나 발뺌하는 일 생길까봐 일부러 추가 안함
-     */
-
 }
