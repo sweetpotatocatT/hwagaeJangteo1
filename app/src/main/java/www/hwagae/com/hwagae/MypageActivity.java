@@ -79,7 +79,6 @@ public class MypageActivity extends AppCompatActivity {
                '내 자신과 이야기를 나눌 수 없습니다' Toast로 출력
               */
 
-
                 // 만약 다른 사람과 채팅을 하게 된다면
                 Intent it = new Intent(MypageActivity.this, ChatActivity.class);
                 it.putExtra("name", rpId.toString());       // ID 넘기기

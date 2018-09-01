@@ -18,7 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class ChatRoomActivity extends AppCompatActivity {
 
-    private ListView lvChatlist;
+    ListView lvChatlist;
 
     // 채팅방에 키값 나오는거 수정
     // 파이어베이스 RealTime Database를 이용하기 위해서 선언해줘야함 !

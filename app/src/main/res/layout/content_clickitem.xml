@@ -7,31 +7,31 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/imgView"
         android:layout_width="339dp"
         android:layout_height="272dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintBottom_toTopOf="@+id/tvViewName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/com_facebook_auth_dialog_cancel_background" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tvViewName"
         android:layout_width="241dp"
         android:layout_height="26dp"
         android:layout_marginBottom="4dp"
         android:layout_marginStart="28dp"
         android:text="name"
-        app:layout_constraintBottom_toTopOf="@+id/textView3"
+        app:layout_constraintBottom_toTopOf="@+id/tvViewPrice"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/tvViewContents"
         android:layout_width="241dp"
         android:layout_height="125dp"
         android:layout_marginBottom="16dp"
@@ -44,7 +44,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/btn_heart"
+        android:id="@+id/btnbinheart"
 
         android:layout_width="53dp"
         android:layout_height="44dp"
@@ -53,17 +53,17 @@
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        app:layout_constraintTop_toBottomOf="@+id/imgView"
         app:layout_constraintVertical_bias="0.062"
-        app:srcCompat="@drawable/heart" />
+        app:srcCompat="@drawable/bin_heart" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/tvViewPrice"
         android:layout_width="241dp"
         android:layout_height="23dp"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="28dp"
         android:text="price"
-        app:layout_constraintBottom_toTopOf="@+id/textView4"
+        app:layout_constraintBottom_toTopOf="@+id/tvViewContents"
         app:layout_constraintStart_toStartOf="parent" />
 </android.support.constraint.ConstraintLayout>

@@ -26,9 +26,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private String USER_NAME;
-    private String USER_ID;
-    private String PARTNER_NAME;
+    private String USER_NAME = "USER_NAME";
+    private String USER_ID = "USER_ID";
+    private String PARTNER_NAME = "PARTNER_NAME";
 
     private LinearLayout linearRequest;
     private ListView lvChat;
@@ -157,7 +157,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // 상대방과의 대화를 끝내기 -> EditText 창과 전송Button 없애기
                 AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
-
+                Log.d("Partner Name : ",PARTNER_NAME);
                 builder.setTitle("대화 종료 상자")
                         .setMessage(PARTNER_NAME + "과의 대화를 종료하시겠습니까?")
                         .setCancelable(false)
@@ -175,9 +175,14 @@ public class ChatActivity extends AppCompatActivity {
                                     dialog.cancel();
                             }
                         });
+                // 다이얼로그 생성
+                AlertDialog alertDialog = builder.create();
+
+                // 다이얼로그 보여주기
+                alertDialog.show();
+
             }
         });
-
-
     }
+
 }
