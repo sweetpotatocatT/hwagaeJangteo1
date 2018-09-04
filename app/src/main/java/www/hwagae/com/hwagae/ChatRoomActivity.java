@@ -1,14 +1,20 @@
 package www.hwagae.com.hwagae;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -46,6 +52,8 @@ public class ChatRoomActivity extends AppCompatActivity {
         >> Key : 유저 이름, Value : 메세지들
          */
         showChatList();
+        registerForContextMenu(lvChatlist);
+
     }
 
     private void showChatList() {
@@ -56,6 +64,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         lvChatlist.setAdapter(adapter);
 
         // 데이터 받아오기 및 어댑터 데이터 추가 및 삭제, 리스너 관리
+
         databaseReference.child("message").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -68,10 +77,9 @@ public class ChatRoomActivity extends AppCompatActivity {
 
             }
 
-
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                adapter.remove(dataSnapshot.getChildren().toString());
+
             }
 
             @Override
@@ -84,6 +92,42 @@ public class ChatRoomActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        getMenuInflater().inflate(R.menu.menu_room, menu);
+        super.onCreateContextMenu(menu, v, menuInfo);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.toList) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(ChatRoomActivity.this);
+            builder.setTitle("대화 종료 상자")
+                    .setMessage("채팅방을 나가시겠습니까?\n채팅 내용은 저장되지 않습니다.")
+                    .setCancelable(false)
+                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // 채팅방삭제 기능 구현
+                            Toast.makeText(ChatRoomActivity.this,"채팅방 나가기 기능 구현", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            // 취소 버튼 클릭시 설정
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        }
+        return super.onContextItemSelected(item);
     }
 
 }

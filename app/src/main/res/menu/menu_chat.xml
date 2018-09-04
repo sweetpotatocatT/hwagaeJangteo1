@@ -14,7 +14,7 @@
 
     <!-- 로그아웃 메뉴 누르면 LoginActivity 화면으로 넘어가게 해서 Logout Button 클릭하게끔 -->
     <item
-        android:id="@+id/Logout"
+        android:id="@+id/outChatroom"
         android:orderInCategory="100"
         android:title="채팅방 나가기"
         app:showAsAction="never" />

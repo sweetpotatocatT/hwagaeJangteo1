@@ -9,6 +9,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -185,4 +187,49 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_chat, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.toMain) {
+            Intent it = new Intent(ChatActivity.this, MainViewActivity.class);
+            startActivity(it);
+            finish();
+        }
+        if(id == R.id.ChatList) {
+            Intent it = new Intent(ChatActivity.this, ChatRoomActivity.class);
+            startActivity(it);
+            finish();
+        }
+        if(id == R.id.outChatroom) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
+            builder.setTitle("대화 종료 상자")
+                    .setMessage(PARTNER_NAME + "과의 채팅방을 나가시겠습니까?\n채팅 내용은 저장되지 않습니다.")
+                    .setCancelable(false)
+                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // 채팅방삭제 기능 구현
+                            Toast.makeText(ChatActivity.this,"채팅방 나가기 기능 구현", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            // 취소 버튼 클릭시 설정
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
