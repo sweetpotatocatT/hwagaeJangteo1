@@ -20,7 +20,7 @@ public class MypageActivity extends AppCompatActivity {
 
     com.facebook.login.widget.ProfilePictureView pfPicture;
     TextView rpId, rpName;
-    Button rpAccount, rpAddress, rpChatting;
+    Button rpAccount, rpAddress;
     ListView lvMyWrite, lvMyLike;
     EditText rpBank, rpAccountnumber, rpAddress2;
 
@@ -48,7 +48,6 @@ public class MypageActivity extends AppCompatActivity {
          */
         rpAccount = findViewById(R.id.rpAccount);
         rpAddress = findViewById(R.id.rpAddress);
-        rpChatting = findViewById(R.id.rpChatting);
 
         // 계좌 버튼 클릭
         rpAccount.setOnClickListener(new View.OnClickListener() {
@@ -70,28 +69,7 @@ public class MypageActivity extends AppCompatActivity {
             }
         });
 
-        // 1:1 채팅 버튼 클릭
-        rpChatting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-              /*
-               이 부분은 내 자신과 채팅을 못하게 구현해야 한다.
-               페이스북 로그인 된 아이디와 1:1 채팅 클릭한 상대방의 아이디가 똑같을 때, (DB에 저장된 값으로)
-               '내 자신과 이야기를 나눌 수 없습니다' Toast로 출력
-              */
-              if(rpName.toString() == (Profile.getCurrentProfile().getFirstName() + Profile.getCurrentProfile().getLastName()).toString()) {
-                  Toast.makeText(MypageActivity.this, "나 자신과는 대화가 불가능합니다.", Toast.LENGTH_SHORT).show();
-                  Log.d("rpId : ", rpId.toString());
-              }
-              else {
-                  // 만약 다른 사람과 채팅을 하게 된다면
-                  Intent it = new Intent(MypageActivity.this, ChatActivity.class);
-                  it.putExtra("name", rpName.toString());       // 이름 넘기기
-                  it.putExtra("id", rpId.toString());           // 아이디 넘기기
-                  startActivity(it);
-              }
-            }
-        });
+
     }
 
 

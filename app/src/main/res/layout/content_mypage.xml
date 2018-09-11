@@ -82,13 +82,6 @@
             android:layout_weight="1"
             android:text="주소" />
 
-        <Button
-            android:id="@+id/rpChatting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="1:1 채팅"
-            android:visibility="visible" />
     </LinearLayout>
 
     <LinearLayout

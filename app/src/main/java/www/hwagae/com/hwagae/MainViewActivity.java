@@ -32,7 +32,7 @@ public class MainViewActivity extends AppCompatActivity {
 
         tvName.setText(Profile.getCurrentProfile().getFirstName() + Profile.getCurrentProfile().getLastName());
 
-        // 모바일 광고를 선언하는 부분 ( 광고 띄울꺼야 ~ ) -> 이 화면에. 아래 영어는 앱ID
+       // 모바일 광고를 선언하는 부분 ( 광고 띄울꺼야 ~ ) -> 이 화면에. 아래 영어는 앱ID
         MobileAds.initialize(MainViewActivity.this, "ca-app-pub-8421245306171728~1702790994");
 
         /*
@@ -97,11 +97,12 @@ public class MainViewActivity extends AppCompatActivity {
             startActivity(it);
         }
         if (id == R.id.ChatList) {
-            Intent it = new Intent(this, ChatRoomActivity.class);
+            Intent it = new Intent(MainViewActivity.this, ChatRoomActivity.class);
             startActivity(it);
         }
         if (id == R.id.Logout) {
-            return true;
+            Intent it = new Intent(MainViewActivity.this, LoginActivity.class);
+            startActivity(it);
         }
 
         return super.onOptionsItemSelected(item);

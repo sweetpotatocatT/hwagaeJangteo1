@@ -25,8 +25,8 @@ import com.google.firebase.database.FirebaseDatabase;
 public class ChatRoomActivity extends AppCompatActivity {
 
     ListView lvChatlist;
-    final ArrayAdapter<String> adapter
-            = new ArrayAdapter<String>(this, R.layout.item, R.id.tvChat);
+
+    ArrayAdapter<String> adapter;
 
     // 채팅방에 키값 나오는거 수정
     // 파이어베이스 RealTime Database를 이용하기 위해서 선언해줘야함 !
@@ -44,6 +44,8 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         lvChatlist = findViewById(R.id.lvChatlist);
 
+        adapter
+                = new ArrayAdapter<String>(this, R.layout.item, R.id.tvChat);
         /*
         showChatList() ?
         > 채팅방 목록을 보여주게 할 수 있는 ListView가 보여지도록 Adapter를 만든다.
