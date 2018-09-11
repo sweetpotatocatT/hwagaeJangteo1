@@ -28,9 +28,11 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class ChatActivity extends AppCompatActivity {
 
+    Intent it = getIntent();
+
     private String USER_NAME = "USER_NAME";
     private String USER_ID = "USER_ID";
-    private String PARTNER_NAME = "PARTNER_NAME";
+    private String PARTNER_NAME = it.getStringExtra("name");
 
     private LinearLayout linearRequest;
     private ListView lvChat;
@@ -104,7 +106,7 @@ public class ChatActivity extends AppCompatActivity {
         });
 
         // 데이터 받아오기 및 어댑터에 데이터 추가 및 삭제 등 .. 리스터 관리
-        databaseReference.child("message").addChildEventListener(new ChildEventListener() {
+        databaseReference.child(PARTNER_NAME).addChildEventListener(new ChildEventListener() {
             // Child 값 넣는 메소드
             // Child : 데이터베이스에서 하위 항목들
             @Override
@@ -208,6 +210,7 @@ public class ChatActivity extends AppCompatActivity {
             finish();
         }
         if(id == R.id.outChatroom) {
+            int count, checked;         // 몇 번째 리스트인지, 몇 번째
             AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
             builder.setTitle("대화 종료 상자")
                     .setMessage(PARTNER_NAME + "과의 채팅방을 나가시겠습니까?\n채팅 내용은 저장되지 않습니다.")
@@ -215,8 +218,7 @@ public class ChatActivity extends AppCompatActivity {
                     .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            // 채팅방삭제 기능 구현
-                            Toast.makeText(ChatActivity.this,"채팅방 나가기 기능 구현", Toast.LENGTH_SHORT).show();
+
                         }
                     })
                     .setNegativeButton("취소", new DialogInterface.OnClickListener() {

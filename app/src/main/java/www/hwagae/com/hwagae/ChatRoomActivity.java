@@ -25,6 +25,8 @@ import com.google.firebase.database.FirebaseDatabase;
 public class ChatRoomActivity extends AppCompatActivity {
 
     ListView lvChatlist;
+    final ArrayAdapter<String> adapter
+            = new ArrayAdapter<String>(this, R.layout.item, R.id.tvChat);
 
     // 채팅방에 키값 나오는거 수정
     // 파이어베이스 RealTime Database를 이용하기 위해서 선언해줘야함 !
@@ -59,8 +61,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     private void showChatList() {
         // 채팅방 목록을 받아올 리스트 어댑터 세팅
         // 리스트뷰에는 상대방의 이름이 들어와야 한다.
-        final ArrayAdapter<String> adapter
-                = new ArrayAdapter<String>(this, R.layout.item, R.id.tvChat);
+
         lvChatlist.setAdapter(adapter);
 
         // 데이터 받아오기 및 어댑터 데이터 추가 및 삭제, 리스너 관리
@@ -100,6 +101,8 @@ public class ChatRoomActivity extends AppCompatActivity {
         super.onCreateContextMenu(menu, v, menuInfo);
     }
 
+
+
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -113,7 +116,8 @@ public class ChatRoomActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // 채팅방삭제 기능 구현
-                            Toast.makeText(ChatRoomActivity.this,"채팅방 나가기 기능 구현", Toast.LENGTH_SHORT).show();
+                            // Toast.makeText(ChatRoomActivity.this,"채팅방 나가기 기능 구현", Toast.LENGTH_SHORT).show();
+
                         }
                     })
                     .setNegativeButton("취소", new DialogInterface.OnClickListener() {

@@ -15,5 +15,6 @@
     <string name="title_activity_clickitem">ClickitemActivity</string>
     <string name="title_activity_itemview">ItemviewActivity</string>
     <string name="title_activity_write">WriteActivity</string>
+    <string name="title_activity_user_page">UserPageActivity</string>
 
 </resources>
