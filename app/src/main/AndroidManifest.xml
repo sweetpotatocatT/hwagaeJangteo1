@@ -2,11 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="www.hwagae.com.hwagae">
 
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <meta-data
         android:name="com.google.android.gms.ads.www.hwagae.com.hwagae"
-        android:value="ca-app-pub-8421245306171728~1702790994"/>
+        android:value="ca-app-pub-8421245306171728~1702790994" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -87,6 +88,11 @@
         <activity
             android:name=".UserPageActivity"
             android:label="@string/title_activity_user_page"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".BankActivity" />
+        <activity
+            android:name=".ItemList"
+            android:label="@string/title_activity_item_list"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

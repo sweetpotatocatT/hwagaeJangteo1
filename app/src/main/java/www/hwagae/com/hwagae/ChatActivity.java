@@ -2,6 +2,7 @@ package www.hwagae.com.hwagae;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -25,20 +26,21 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class ChatActivity extends AppCompatActivity {
 
     Intent it = getIntent();
 
-    private String USER_NAME = "USER_NAME";
-    private String USER_ID = "USER_ID";
-    private String PARTNER_NAME = it.getStringExtra("name");
+    String USER_NAME = "USER_NAME";
+    String USER_ID = "USER_ID";
+    String PARTNER_NAME = it.getStringExtra("name");
 
-    private LinearLayout linearRequest;
-    private ListView lvChat;
-    private EditText rqText;
-    private Button btnRequest;
-    private Button rqBalance, rqAddress, rqFinish;
+    LinearLayout linearRequest;
+    ListView lvChat;
+    EditText rqText;
+    Button btnRequest;
+    Button rqBalance, rqAddress, rqFinish;
 
     // 채팅 ArrayAdapter 설정 -> 리스트뷰에 넣어주기 위함
     ArrayAdapter<String> adapter;
@@ -67,6 +69,13 @@ public class ChatActivity extends AppCompatActivity {
                 new ArrayAdapter<>(this, R.layout.item, R.id.tvChat);
         lvChat.setAdapter(adapter);
 
+        // .계좌, 은행, 주소를 내 정보에서 가져오기
+        USER_ID = Profile.getCurrentProfile().getId().toString();
+        SharedPreferences preferences = getSharedPreferences(USER_ID, MODE_PRIVATE);
+        String Addressinfo = preferences.getString("Addressinfo", "");
+        String Accountinfo = preferences.getString("Accountinfo", "");
+        String Bankinfo = preferences.getString("Bankinfo1", "");
+
         /*
         페이스북 연동 로그인 후, 받아온 유저 이름 저장
          */
@@ -76,12 +85,11 @@ public class ChatActivity extends AppCompatActivity {
         /*
         페이스북 연동 로그인 후, 받아온 유저 아이디 저장 -> 이름이 같아도 무결성 유지를 위해
          */
-        USER_ID
-                = (Profile.getCurrentProfile().getId()).toString();
+
 
 
         // 채팅방 입장 -> 메소드 구현
-//        openChat(USER_NAME);
+
 
         // 채팅전송 버튼 온클릭 리스터
         btnRequest.setOnClickListener(new View.OnClickListener() {
@@ -123,7 +131,8 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                ChatData removedChat = dataSnapshot.getValue(ChatData.class);
+                adapter.remove(removedChat.getUserName() + " : " + removedChat.getMessage());
             }
 
             @Override
@@ -136,6 +145,8 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
+
+
 
         // 계좌번호 전송
         rqBalance.setOnClickListener(new View.OnClickListener() {
@@ -218,7 +229,12 @@ public class ChatActivity extends AppCompatActivity {
                     .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
+                            Intent it = new Intent(ChatActivity.this, ChatRoomActivity.class);
+                            it.putExtra("PARTNER_NAME", PARTNER_NAME);
+                            startActivity(it);
+                            finish();
+                            // chatRoomActivity로 PARTNER_NAME을 넘겨서 다음 액티비티에서
+                            // PARTNER_NAME을 참조하여 해당 채팅방 삭제
                         }
                     })
                     .setNegativeButton("취소", new DialogInterface.OnClickListener() {

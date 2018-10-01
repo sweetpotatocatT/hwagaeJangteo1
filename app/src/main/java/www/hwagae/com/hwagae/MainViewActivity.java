@@ -2,13 +2,10 @@ package www.hwagae.com.hwagae;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
 import com.facebook.Profile;
@@ -32,7 +29,7 @@ public class MainViewActivity extends AppCompatActivity {
 
         tvName.setText(Profile.getCurrentProfile().getFirstName() + Profile.getCurrentProfile().getLastName());
 
-       // 모바일 광고를 선언하는 부분 ( 광고 띄울꺼야 ~ ) -> 이 화면에. 아래 영어는 앱ID
+        // 모바일 광고를 선언하는 부분 ( 광고 띄울꺼야 ~ ) -> 이 화면에. 아래 영어는 앱ID
         MobileAds.initialize(MainViewActivity.this, "ca-app-pub-8421245306171728~1702790994");
 
         /*
@@ -104,6 +101,11 @@ public class MainViewActivity extends AppCompatActivity {
             Intent it = new Intent(MainViewActivity.this, LoginActivity.class);
             startActivity(it);
         }
+        if(id== R.id.Board){
+            Intent it = new Intent(MainViewActivity.this,ItemviewActivity.class);
+            startActivity(it); //게시판으로이동
+        }
+
 
         return super.onOptionsItemSelected(item);
     }

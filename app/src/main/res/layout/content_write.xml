@@ -7,84 +7,90 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".WriteActivity"
     tools:showIn="@layout/activity_write">
+
     <TextView
         android:id="@+id/tvItemname"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginEnd="13dp"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="218dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="24dp"
         android:text="상품명"
-        app:layout_constraintBottom_toTopOf="@+id/tvPrice"
-        app:layout_constraintEnd_toStartOf="@+id/etPrice"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imgUpimg" />
 
     <TextView
         android:id="@+id/tvPrice"
         android:layout_width="39dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="231dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_height="31dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="20dp"
         android:text="가격"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/etPrice"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvItemname" />
 
     <ImageView
         android:id="@+id/imgUpimg"
-        android:layout_width="298dp"
-        android:layout_height="188dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="288dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/etItemname"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_chainStyle="spread_inside"
         app:srcCompat="@android:drawable/ic_menu_gallery" />
+
 
     <EditText
         android:id="@+id/etContents"
-        android:layout_width="304dp"
-        android:layout_height="157dp"
+        android:layout_width="291dp"
+        android:layout_height="133dp"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+
+        app:layout_constraintBottom_toTopOf="@+id/btnUpload"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etPrice"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <EditText
+        android:id="@+id/etItemname"
+        android:layout_width="281dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="243dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="내용"
-        app:layout_constraintBottom_toTopOf="@+id/btnUpload"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/etItemname"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="212dp"
-        android:layout_marginTop="204dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name"
-        app:layout_constraintBottom_toTopOf="@+id/btnUpload"
-        app:layout_constraintEnd_toEndOf="@+id/etPrice"
-        app:layout_constraintStart_toStartOf="@+id/etPrice"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.481"
+        app:layout_constraintStart_toStartOf="@+id/tvItemname"
+        app:layout_constraintTop_toBottomOf="@+id/imgUpimg" />
 
     <EditText
         android:id="@+id/etPrice"
-        android:layout_width="0dp"
+        android:layout_width="284dp"
         android:layout_height="40dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="42dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name"
-        app:layout_constraintBottom_toTopOf="@+id/etContents"
+
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tvItemname" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/tvPrice"
+        app:layout_constraintTop_toBottomOf="@+id/etItemname" />
 
     <Button
         android:id="@+id/btnUpload"
@@ -97,4 +103,21 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnUpimg"
+        android:layout_width="70dp"
+        android:layout_height="46dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:onClick="ImgUp"
+        android:text="사진"
+        app:layout_constraintBottom_toTopOf="@+id/etItemname"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/imgUpimg"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.525" />
 </android.support.constraint.ConstraintLayout>

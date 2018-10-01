@@ -56,7 +56,6 @@ public class ChatRoomActivity extends AppCompatActivity {
         >> Key : 유저 이름, Value : 메세지들
          */
         showChatList();
-        registerForContextMenu(lvChatlist);
 
     }
 
@@ -65,14 +64,20 @@ public class ChatRoomActivity extends AppCompatActivity {
         // 리스트뷰에는 상대방의 이름이 들어와야 한다.
 
         lvChatlist.setAdapter(adapter);
+        ChatActivity chatActivity = new ChatActivity();
+        String PARTNER_NAME = chatActivity.PARTNER_NAME;
+        // ChatActivity에 있는 PARTNER_NAME을 child의 이름으로 설정
 
         // 데이터 받아오기 및 어댑터 데이터 추가 및 삭제, 리스너 관리
 
-        databaseReference.child("message").addChildEventListener(new ChildEventListener() {
+        databaseReference.child(PARTNER_NAME).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 /*Log.d("LOG", "dataSnapshot.getKey() : " + dataSnapshot.getKey());*/
+                ChatData data = dataSnapshot.getValue(ChatData.class);
                 adapter.add(dataSnapshot.getChildren().toString());
+                Log.d("LOG : " , "dataSnapshot.getChildren() : " + dataSnapshot.getChildren());
+                // adapter.add(dataSnapshot.getChildren().toString());
             }
 
             @Override
@@ -103,8 +108,6 @@ public class ChatRoomActivity extends AppCompatActivity {
         super.onCreateContextMenu(menu, v, menuInfo);
     }
 
-
-
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -117,8 +120,6 @@ public class ChatRoomActivity extends AppCompatActivity {
                     .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            // 채팅방삭제 기능 구현
-                            // Toast.makeText(ChatRoomActivity.this,"채팅방 나가기 기능 구현", Toast.LENGTH_SHORT).show();
 
                         }
                     })

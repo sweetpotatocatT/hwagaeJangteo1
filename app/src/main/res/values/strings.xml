@@ -16,5 +16,6 @@
     <string name="title_activity_itemview">ItemviewActivity</string>
     <string name="title_activity_write">WriteActivity</string>
     <string name="title_activity_user_page">UserPageActivity</string>
+    <string name="title_activity_item_list">ItemList</string>
 
 </resources>
