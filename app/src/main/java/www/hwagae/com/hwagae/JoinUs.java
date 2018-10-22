@@ -18,8 +18,13 @@ import android.widget.Toast;
 import com.facebook.Profile;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Iterator;
 
 public class JoinUs extends AppCompatActivity {
 
@@ -86,6 +91,55 @@ public class JoinUs extends AppCompatActivity {
                 tvgetName.setVisibility(View.VISIBLE);
             }
         });
+        checkId();
+    }
+
+    // 중복 확인
+    public void checkId() {
+        dbref.child("User").child("User").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    User user = ds.getValue(User.class);
+                    if(ds.getValue().equals(user.getUserId())) {
+                        Log.d("test ", ds.getValue().toString() + ", " + user.getUserId());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        /*dbref.child("User").child("User").addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        User user = dataSnapshot.getValue(User.class);
+                        Log.d("dataSnapshot: ", dataSnapshot.getChildren().iterator().toString());
+                        // Log.d("Priority:" , dataSnapshot.getPriority().toString());
+                        Log.d("value: ", dataSnapshot.getValue().toString());
+                        Iterator<DataSnapshot> child = dataSnapshot.getChildren().iterator();
+
+                        while(child.hasNext()) {
+                            if(tvgetId.toString().equals(child.next().getKey())) {
+                                if(tvgetName.toString().equals(child.next().getKey()) == false){
+                                    Toast.makeText(JoinUs.this, "이미 등록된 아이디 입니다. 존재하는 아이디를 입력해주세요."
+                                            , Toast.LENGTH_LONG).show();
+                                    dbref.child("User").child("User").removeEventListener(this);
+                                }
+
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                }
+        );*/
     }
 
     // textview에  default 이름 세팅하기
@@ -109,7 +163,7 @@ public class JoinUs extends AppCompatActivity {
         DatabaseReference ref = dbref.child("User");
 
         User user = new User(name, id);
-        ref.child("User").push().setValue(user)    // 임의의 키 값으로 넣어진다. ( 구성요소 : userName, userId )
+        ref.push().setValue(user)    // 임의의 키 값으로 넣어진다. ( 구성요소 : userName, userId )
         .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -121,7 +175,7 @@ public class JoinUs extends AppCompatActivity {
                 code = -1;
             }
         });
-        Log.d("getKey(): ", ref.child("User").child(id).toString());
+        Log.d("getKey(): ", ref.child("User").child("User").getDatabase().toString());
         return code; // 상태를 알려주는 코드 반환
     }
 
