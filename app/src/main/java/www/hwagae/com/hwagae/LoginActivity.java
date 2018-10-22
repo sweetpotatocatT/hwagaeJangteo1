@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import com.facebook.AccessToken;
@@ -16,6 +17,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.Login;
 import com.facebook.login.LoginManager;
@@ -27,6 +29,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import android.support.v4.app.Fragment;
 import android.widget.TextView;
 
@@ -40,6 +45,8 @@ public class LoginActivity extends AppCompatActivity {
     CallbackManager callbackManager;
     LoginButton loginButton;
     TextView tvJoinus;
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseReference = firebaseDatabase.getReference();
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -83,7 +90,15 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                // App code
+
+                User user = new User(Profile.getCurrentProfile().getName(), Profile.getCurrentProfile().getId());
+                databaseReference.child("User").child("UserId").push().setValue(user.userId);
+                databaseReference.child("User").child("UserName").push().setValue(user.userName);
+
+                if((databaseReference.child("User").child("UserId").getDatabase().getInstance()).equals(databaseReference.child("User").child("UserId").push().setValue(user.userId))) {
+                    Log.d("getDatabase() : ", (databaseReference.child("User").child("UserId").getDatabase()).toString());
+
+                }
             }
 
             @Override
@@ -161,7 +176,7 @@ public class LoginActivity extends AppCompatActivity {
         tvJoinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent it = new Intent(LoginActivity.this, MainViewActivity.class);
+                Intent it = new Intent(LoginActivity.this, JoinUs.class);
                 startActivity(it);
 
             }

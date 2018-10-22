@@ -73,7 +73,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="1:1 채팅"
-            android:visibility="visible" />
+            android:visibility="visible"
+            android:onClick="GoChatting"/>
+
     </LinearLayout>
 
         <TextView

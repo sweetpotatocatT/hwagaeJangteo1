@@ -16,12 +16,17 @@ public class User {
         초기화를 시킨 다음에 사용을 한다는 의미이다.
         따라서 활용하기 위한 기본생성자가 필요하다. (인자있는 생성자를 적지 않으면 기본생성자가 자동으로 선언됨)
         */
+
     public User() {
     }
 
     public User(String userName, String userId) {
         this.userName = userName;
         this.userId = userId;
+    }
+
+    public User(String userName) {
+        this.userName = userName;
     }
 
     public String getUserName() {

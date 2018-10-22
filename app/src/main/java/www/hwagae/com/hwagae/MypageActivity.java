@@ -1,5 +1,7 @@
 package www.hwagae.com.hwagae;
 
+import android.accounts.Account;
+import android.arch.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,15 +22,14 @@ import com.facebook.Profile;
 
 public class MypageActivity extends AppCompatActivity {
 
+    Intent it;
     com.facebook.login.widget.ProfilePictureView pfPicture;
     TextView rpId, rpName, rpBank;
-    Button rpAccount, rpAddress, rpSave, rpSave2;
+    Button rpAccount, rpAddress, rpChatting, rpSave, rpSave2;
     LinearLayout lvAccount, lvAddress;
     ListView lvMyWrite, lvMyLike;
     EditText rpAccountnumber, rpAddress2;
-    private com.google.firebase.database.FirebaseDatabase firebaseDatabase = com.google.firebase.database.FirebaseDatabase.getInstance();
-    private com.google.firebase.database.DatabaseReference databaseReference = firebaseDatabase.getReference();
-    Intent it;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,78 +40,97 @@ public class MypageActivity extends AppCompatActivity {
         /*
         이름과 아이디
          */
+        lvAccount = findViewById(R.id.lvAccount);
+        lvAddress = findViewById(R.id.lvAddress);
+        rpBank = findViewById(R.id.rpBank);
         rpName = findViewById(R.id.rpName);
         rpId = findViewById(R.id.rpId);
-        rpName.setText(Profile.getCurrentProfile().getFirstName() + Profile.getCurrentProfile().getLastName());
-        rpId.setText(Profile.getCurrentProfile().getId());
-        rpSave = findViewById(R.id.rpSave);
-        rpSave2 = findViewById(R.id.rpSave2);
-
-
-        // 프로필 사진
         pfPicture = findViewById(R.id.pfPicture);
-        pfPicture.setProfileId(Profile.getCurrentProfile().getId());
-
-        /*
-        계좌, 주소, 1:1채팅
-         */
         rpAccount = findViewById(R.id.rpAccount);
+        rpAccountnumber = findViewById(R.id.rpAccountnumber);
+        rpSave = findViewById(R.id.rpSave);
+        rpAddress2 = findViewById(R.id.rpAddress2);
+        rpSave2 = findViewById(R.id.rpSave2);
+        rpName.setText( Profile.getCurrentProfile().getFirstName() + Profile.getCurrentProfile().getLastName());
+        rpId.setText( Profile.getCurrentProfile().getId());
+        pfPicture.setProfileId(Profile.getCurrentProfile().getId());
         rpAddress = findViewById(R.id.rpAddress);
+        String Pid = Profile.getCurrentProfile().getId().toString();
+        SharedPreferences preferences1 = getSharedPreferences(Pid, MODE_PRIVATE);
+        String Addressinfo1 = preferences1.getString("Addressinfo", "");
+        String Accountinfo1 = preferences1.getString("Accountinfo", "");
 
-        // 계좌 버튼 클릭
+        rpAddress2.setText(Addressinfo1);
+        String Bankinfo2 = preferences1.getString("Bankinfo1", "");
+
+
+        if(Bankinfo2 != "은행"){
+            rpBank.setText(Bankinfo2);
+        }
+        if(Addressinfo1 != "주소"){
+            rpAddress2.setText(Addressinfo1);
+        }
+        if(Accountinfo1 != "계좌"){
+            rpAccountnumber.setText(Accountinfo1);
+        }
+
         rpAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // DB에 저장된 값이 없다면, EditText2개랑 Button 보여주기 -> 구현해야함
-                // 밑의 예는 저장된 값이 '없을 때' 띄우는 Toast
-                // Toast.makeText(MypageActivity.this, "계좌번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
                 lvAccount.setVisibility(View.VISIBLE);
+                lvAddress.setVisibility(View.GONE);
+//계좌누르면 계좌창 나오기
+
+
+
+
             }
         });
-
-        // 주소 버튼 클릭
         rpAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // DB에 저장된 값이 없다면, EditText1개 보여주기 -> 구현해야함
-                // 밑의 예는 저장된 값이 '없을 때' 띄우는 Toast
-                // Toast.makeText(MypageActivity.this, "주소를 입력해주세요.", Toast.LENGTH_SHORT).show();
                 lvAddress.setVisibility(View.VISIBLE);
-            }
-        });
-
-        String Bankinfo1 = it.getStringExtra("bank");
-        rpBank.setText(Bankinfo1);
-        rpSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String m = "은행";
+                lvAccount.setVisibility(View.GONE);
                 String Pid = Profile.getCurrentProfile().getId().toString();
                 SharedPreferences preferences1 = getSharedPreferences(Pid, MODE_PRIVATE);
                 String Addressinfo1 = preferences1.getString("Addressinfo", "");
                 String Accountinfo1 = preferences1.getString("Accountinfo", "");
+
+                rpAddress2.setText(Addressinfo1);
                 String Bankinfo2 = preferences1.getString("Bankinfo1", "");
-                if(Bankinfo2 != m) {
-                    Toast.makeText(MypageActivity.this, "이미 저장되었습니다.", Toast.LENGTH_SHORT).
 
-                            show();
-                    finish();
+//주소누르면 주소창 나오기
 
+            }
+        });
+
+        rpSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String m = "계좌";
+                String Pid = Profile.getCurrentProfile().getId().toString();
+                String Acc = rpAccountnumber.getText().toString();
+                SharedPreferences preferences = getSharedPreferences(Pid, MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+
+
+                editor.putString("Accountinfo", Acc);
+
+
+                editor.commit();
+                SharedPreferences preferences1 = getSharedPreferences(Pid, MODE_PRIVATE);
+                String Addressinfo1 = preferences1.getString("Addressinfo", "");
+                String Accountinfo1 = preferences1.getString("Accountinfo", "");
+                String Bankinfo2 = preferences1.getString("Bankinfo1", "");
+
+                if(rpAccountnumber.getText().toString() != Accountinfo1){
+                    rpAccountnumber.setText(Accountinfo1);
                 }
-                it = getIntent();
-                String Bankinfo1 = it.getStringExtra("bank");
-                rpBank.setText(Bankinfo1);
+
                 //은행정보 가져오기
 
                 String Accountinfo = rpAccountnumber.getText().toString();
-//아이디받아오기
-
-                SharedPreferences preferences = getSharedPreferences(Pid, MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString("Accountinfo", Accountinfo);
-                editor.putString("Bankinfo1", Bankinfo1);
-
-                editor.commit();
 //계좌은행저장
 
                 String info = rpAccountnumber.getText().toString() + rpBank.getText().toString();
@@ -125,17 +145,13 @@ public class MypageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
-                String Addressinfo = rpAddress2.getText().toString();
-
                 String Pid = Profile.getCurrentProfile().getId().toString();
-
-
                 SharedPreferences preferences = getSharedPreferences(Pid, MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
-//주소저장
-                editor.putString("Addressinfo", Addressinfo);
 
+                String Ac = rpAddress2.getText().toString();
+
+                editor.putString("Addressinfo", Ac);
 
                 editor.commit();
                 String m = "주소";
@@ -144,16 +160,25 @@ public class MypageActivity extends AppCompatActivity {
                 String Addressinfo1 = preferences1.getString("Addressinfo", "");
                 String Accountinfo1 = preferences1.getString("Accountinfo", "");
                 String Bankinfo2 = preferences1.getString("Bankinfo1", "");
+                rpAddress2.setText(Addressinfo1);
                 if(Addressinfo1 != m){
-                    Toast.makeText(MypageActivity.this, "이미 저장되었습니다.", Toast.LENGTH_SHORT).
+                    rpAddress2.setText(Addressinfo1);
+                    //Toast.makeText(MypageActivity.this, "이미 저장되었습니다.", Toast.LENGTH_SHORT).
 
-                            show();
-                    finish();
+                    //show();
+                    // finish();
 
                 }
 
                 Toast.makeText(MypageActivity.this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
+                rpAddress2.setText(Addressinfo1);
+                String Addressinfo = rpAddress2.getText().toString();
+
+                String Pid2 = Profile.getCurrentProfile().getId().toString();
+
             }
+
+
         });
 
 
@@ -180,3 +205,13 @@ public class MypageActivity extends AppCompatActivity {
     }
 
 }
+
+
+
+
+
+
+
+
+
+

@@ -1,12 +1,16 @@
 package www.hwagae.com.hwagae;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,20 +20,37 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Random;
 
 public class WriteActivity extends AppCompatActivity {
+    private static final String TAG = "WriteActivity";
+
+
+
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
-    private static final int CROP_FROM_IMAGE=2; //아직구현x
 
-    private Uri ImageCaptureUri;
+    long key=0;
+    private Uri imgUri, photoURI, albumURI,filePath;
+    private String mCurrentPhotoPath;
     private String absoultePath;
     private int id_view;
     private EditText etItemname, etPrice, etContents;
@@ -74,36 +95,46 @@ public class WriteActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-
+        //리스트뷰에 넣는 코드
         btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                uploadFile();
                 // 입력 없을 시 처리 추가
+                Date now = new Date();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
+                // key를 랜덤값으로
+                long date = Long.parseLong(sdf.format(now));
 
-                WriteData write = new WriteData( etItemname.getText().toString(),
+                Random rnd = new Random();
+                long key = date-rnd.nextInt();
+
+                date = -1 * date;
+
+                WriteData write = new WriteData(key, "temp_id", etItemname.getText().toString(),
                         etContents.getText().toString(),
-                        etPrice.getText().toString());
+                        etPrice.getText().toString(), date, "true");
                 databaseReference.child("board").push().setValue(write);
 
-                Intent intent = new Intent(WriteActivity.this,ClickitemActivity.class);
-                intent.putExtra("Contents",etContents.getText().toString());
-                intent.putExtra("Itemname",etItemname.getText().toString());
-                intent.putExtra("Price",etPrice.getText().toString());
+                Intent intent = new Intent(WriteActivity.this, ClickitemActivity.class);
+                intent.putExtra("content", etContents.getText().toString());
+                intent.putExtra("title", etItemname.getText().toString());
+                intent.putExtra("price", etPrice.getText().toString());
                 startActivity(intent);
                 finish();
-
-                // 입력 후 입력칸 초기화 추가
             }
         });
 
 
     }
 
-    public void ImgUp(View v) { // btnUpimg 에있는 온클릭
+
+
+
+    /*****************  여기서부턴 카메라 기능 *****************/
+
+    //btnUpimg에 있는 온클릭속성. 사진을 누르면 Dialog가 뜨는 소스
+    public void ImgUp(View v) {
         id_view = v.getId();
         if (v.getId() == R.id.btnUpimg) { //사진선택 버튼을 누르면
             DialogInterface.OnClickListener cameraListener = new DialogInterface.OnClickListener() {
@@ -140,48 +171,102 @@ public class WriteActivity extends AppCompatActivity {
 
     }
 
-    //Bitmap 저장
 
-    private void storeCropImage(Bitmap bitmap,String filePath) {
-        String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/SmartWheel";
-        File directory_SmartWheel = new File(dirPath);
 
-        if (!directory_SmartWheel.exists())
-            directory_SmartWheel.mkdir();
 
-        File copyFile = new File(filePath);
-        BufferedOutputStream out = null;
+    //**************★카메라에서 사진촬영 함수
+    public void PhotoAction() {
 
-        try{
-            copyFile.createNewFile();
-            out=new BufferedOutputStream(new FileOutputStream(copyFile));
-            bitmap.compress(Bitmap.CompressFormat.JPEG,100,out);
+        //촬영 후 이미지 가져옴
+        String state = Environment.getExternalStorageState();
 
-            //sendBroadcast를 통해 Crop된 사진을 앨범에 보이도록 갱신
+        if(Environment.MEDIA_MOUNTED.equals(state)){
 
-            sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,Uri.fromFile(copyFile)));
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-            out.flush();
-            out.close();
-        }catch (Exception e){
-            e.printStackTrace();
+            if(intent.resolveActivity(getPackageManager())!=null){
+
+                File photoFile = null;
+
+                try{
+
+                    photoFile = createImageFile();
+
+                }catch (IOException e){
+
+                    e.printStackTrace();
+
+                }
+
+                if(photoFile!=null){
+
+                    Uri providerURI = FileProvider.getUriForFile(this,getPackageName(),photoFile);
+
+                    imgUri = providerURI;
+
+                    intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, providerURI);
+
+                    startActivityForResult(intent, PICK_FROM_CAMERA);
+
+                }
+
+            }
+
+        }else{
+
+            Log.v("알림", "저장공간에 접근 불가능");
+
+            return;
+
         }
 
+    }
 
+    //카메라로 촬영한 이미지 생성
+    public File createImageFile() throws IOException{
+
+        String imgFileName = System.currentTimeMillis() + ".jpg";
+
+        File imageFile= null;
+
+        File storageDir = new File(Environment.getExternalStorageDirectory() + "/Pictures", "ireh");
+
+
+        if(!storageDir.exists()){
+
+            Log.v("알림","storageDir 존재 x " + storageDir.toString());
+
+            storageDir.mkdirs();
+
+        }
+
+        Log.v("알림","storageDir 존재함 " + storageDir.toString());
+
+        imageFile = new File(storageDir,imgFileName);
+
+        mCurrentPhotoPath = imageFile.getAbsolutePath();
+
+
+
+        return imageFile;
 
     }
 
 
-    //카메라에서 사진촬영 함수
-    public void PhotoAction() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    //촬영한 이미지 저장
+    public void galleryAddPic(){
 
-        //임시로 사용할 파일의 경로생성
-        String url = "tmp_" + String.valueOf(System.currentTimeMillis()) + ".jpg";
-        ImageCaptureUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), url));
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
 
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, ImageCaptureUri);
-        startActivityForResult(intent, PICK_FROM_CAMERA);
+        File f = new File(mCurrentPhotoPath);
+
+        Uri contentUri = Uri.fromFile(f);
+
+        mediaScanIntent.setData(contentUri);
+
+        sendBroadcast(mediaScanIntent);
+
+        Toast.makeText(this,"사진이 저장되었습니다",Toast.LENGTH_SHORT).show();
 
     }
 
@@ -189,76 +274,170 @@ public class WriteActivity extends AppCompatActivity {
     public void PhotoAlbumAction() {
 
         // /앨범호출
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-        startActivityForResult(intent, PICK_FROM_ALBUM);
+        Intent intent = new Intent();
+
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "이미지를 선택하세요."), 0);
+
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        //request코드가 0이고 OK를 선택했고 data에 뭔가가 들어 있다면
+        if(requestCode == 0 && resultCode == RESULT_OK){
+            filePath = data.getData();
+            Log.d(TAG,"uri:" + String.valueOf(filePath));
+            try {
+                //Uri 파일을 Bitmap으로 만들어서 ImageView에 집어 넣는다.
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                imgUpimg.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-        if (resultCode != RESULT_OK)
+    //upload the file
+    private void uploadFile() {
+        //업로드할 파일이 있으면 수행
+        if (filePath != null) {
+            //업로드 진행 Dialog 보이기
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("업로드중...");
+            progressDialog.show();
+
+            //storage
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+
+            //Unique한 파일명을 만들자.
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMHH_mmss");
+            Date now = new Date();
+            String filename = formatter.format(now) + ".png";
+            //storage 주소와 폴더 파일명을 지정해 준다.
+            StorageReference storageRef = storage.getReferenceFromUrl("gs://hwagae4.appspot.com").child("image/" + filename);
+            //올라가거라...
+            storageRef.putFile(filePath)
+                    //성공시
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss(); //업로드 진행 Dialog 상자 닫기
+                            Toast.makeText(getApplicationContext(), "업로드 완료!", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    //실패시
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), "업로드 실패!", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    //진행중
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            @SuppressWarnings("VisibleForTests") //이걸 넣어 줘야 아랫줄에 에러가 사라진다. 넌 누구냐?
+                                    double progress = (100 * taskSnapshot.getBytesTransferred()) /  taskSnapshot.getTotalByteCount();
+                            //dialog에 진행률을 퍼센트로 출력해 준다
+                            progressDialog.setMessage("Uploaded " + ((int) progress) + "% ...");
+                        }
+                    });
+        } else {
+            Toast.makeText(getApplicationContext(), "파일을 먼저 선택하세요.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+
+    //startActivityForResult에 대한 처리
+    //   @Override
+
+   /* protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        if(resultCode != RESULT_OK){
+
             return;
-        switch (requestCode) {
-            case PICK_FROM_ALBUM:
-                ImageCaptureUri = data.getData();
-                Log.d("SmartWheel", ImageCaptureUri.getPath().toString());
 
-            case PICK_FROM_CAMERA: {
+        }
 
-                //이미지를 가져온 이후의 리사이즈할 이미지 크기 결정
-                Intent intent = new Intent("come.android.camera.action.CROP");
-                intent.setDataAndType(ImageCaptureUri,"image/*");
+        switch (requestCode){
 
-                intent.putExtra("ouputX",200); //CROP한 이미지 x축
-                intent.putExtra("outputY",200);//y축
-                intent.putExtra("aspectX",1);//CROP박스의X축비율
-                intent.putExtra("aspectY",1);//y비율
-                intent.putExtra("scale",true);
-                intent.putExtra("return-data",true);
-                //CROP_FROM_CAMERA 케이스문으로 이동
-                startActivityForResult(intent,CROP_FROM_IMAGE);
+            case PICK_FROM_ALBUM : {
+
+                //앨범에서 가져오기
+
+                if(data.getData()!=null){
+
+                    try{
+
+                        File albumFile = null;
+
+                        albumFile = createImageFile();
+
+
+                        photoURI = data.getData();
+
+                        albumURI = Uri.fromFile(albumFile);
+
+
+                        galleryAddPic();
+
+                        //이미지뷰에 이미지 셋팅
+                        imgUpimg.setImageURI(photoURI);
+
+                        //cropImage();
+
+                    }catch (Exception e){
+
+                        e.printStackTrace();
+
+                        Log.v("알림","앨범에서 가져오기 에러");
+
+                    }
+
+                }
+
                 break;
 
             }
 
-            case CROP_FROM_IMAGE:{
-                //크롭이 된 이후의 이미지를 넘겨받는다.
-                if (resultCode!=RESULT_OK){
-                    return;
-                }
-                final Bundle extras = data.getExtras();
+            case PICK_FROM_CAMERA : {
 
-                //CROP된 이미지를 저장하기 위한 file 경로
-                String filePath = Environment.getExternalStorageDirectory().getAbsolutePath()
-                        + "/SmartWheel/"+System.currentTimeMillis()+".jpg";
+                //카메라 촬영
 
-                if(extras!=null){
-                    Bitmap photo = extras.getParcelable("data"); //CROP된 BITMAP
-                    imgUpimg.setImageBitmap(photo); //★레이아웃 이미지칸에 보여줌
+                try{
 
-                    storeCropImage(photo,filePath);
-                    absoultePath =filePath;
+                    Log.v("알림", "FROM_CAMERA 처리");
 
-                    break;
+                    galleryAddPic();
 
+                    imgUpimg.setImageURI(imgUri);
 
+                }catch (Exception e){
+
+                    e.printStackTrace();
 
                 }
-                //임시파일삭제
-                File f = new File(ImageCaptureUri.getPath());
-                if(f.exists()){
-                    f.delete();
-                }
+
+                break;
+
             }
+
         }
 
-
-
     }
-}
 
+*/
+
+
+}
 
 
 

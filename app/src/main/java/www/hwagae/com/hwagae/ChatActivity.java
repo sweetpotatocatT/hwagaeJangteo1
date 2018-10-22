@@ -34,7 +34,7 @@ public class ChatActivity extends AppCompatActivity {
 
     String USER_NAME = "USER_NAME";
     String USER_ID = "USER_ID";
-    String PARTNER_NAME = it.getStringExtra("name");
+    String PARTNER_NAME = "PARTNER_NAME";
 
     LinearLayout linearRequest;
     ListView lvChat;
@@ -103,7 +103,7 @@ public class ChatActivity extends AppCompatActivity {
                 // USER_NAME에 해당하는 사람이 친 채팅을 chat에 넣기
                 ChatData chat = new ChatData(USER_NAME, rqText.getText().toString());
                 // Database에 message라는 root로 chat 푸시
-                databaseReference.child("message").push().setValue(chat);
+                databaseReference.child("message").push().child(PARTNER_NAME).setValue(chat);
                 rqText.setText("");         // 입력창 초기화
 
 
@@ -114,7 +114,7 @@ public class ChatActivity extends AppCompatActivity {
         });
 
         // 데이터 받아오기 및 어댑터에 데이터 추가 및 삭제 등 .. 리스터 관리
-        databaseReference.child(PARTNER_NAME).addChildEventListener(new ChildEventListener() {
+        databaseReference.child("message").addChildEventListener(new ChildEventListener() {
             // Child 값 넣는 메소드
             // Child : 데이터베이스에서 하위 항목들
             @Override
@@ -131,8 +131,8 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                ChatData removedChat = dataSnapshot.getValue(ChatData.class);
-                adapter.remove(removedChat.getUserName() + " : " + removedChat.getMessage());
+                ChatData chatData = dataSnapshot.getValue(ChatData.class);
+                adapter.remove(chatData.getUserName() + " : " + chatData.getMessage());
             }
 
             @Override

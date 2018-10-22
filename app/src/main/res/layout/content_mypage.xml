@@ -111,9 +111,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:visibility="gone"
+        android:visibility="visible"
         >
-        <EditText
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/rpBank"

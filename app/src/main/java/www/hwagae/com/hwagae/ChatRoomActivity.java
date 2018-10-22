@@ -65,17 +65,17 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         lvChatlist.setAdapter(adapter);
         ChatActivity chatActivity = new ChatActivity();
-        String PARTNER_NAME = chatActivity.PARTNER_NAME;
+        final String PARTNER_NAME = chatActivity.PARTNER_NAME;
         // ChatActivity에 있는 PARTNER_NAME을 child의 이름으로 설정
 
         // 데이터 받아오기 및 어댑터 데이터 추가 및 삭제, 리스너 관리
 
-        databaseReference.child(PARTNER_NAME).addChildEventListener(new ChildEventListener() {
+        databaseReference.child("message").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 /*Log.d("LOG", "dataSnapshot.getKey() : " + dataSnapshot.getKey());*/
                 ChatData data = dataSnapshot.getValue(ChatData.class);
-                adapter.add(dataSnapshot.getChildren().toString());
+                adapter.add(databaseReference.child("message").child(PARTNER_NAME).getKey());
                 Log.d("LOG : " , "dataSnapshot.getChildren() : " + dataSnapshot.getChildren());
                 // adapter.add(dataSnapshot.getChildren().toString());
             }
