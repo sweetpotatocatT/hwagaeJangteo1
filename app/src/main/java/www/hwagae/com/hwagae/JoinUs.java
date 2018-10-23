@@ -112,34 +112,7 @@ public class JoinUs extends AppCompatActivity {
 
             }
         });
-        /*dbref.child("User").child("User").addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        User user = dataSnapshot.getValue(User.class);
-                        Log.d("dataSnapshot: ", dataSnapshot.getChildren().iterator().toString());
-                        // Log.d("Priority:" , dataSnapshot.getPriority().toString());
-                        Log.d("value: ", dataSnapshot.getValue().toString());
-                        Iterator<DataSnapshot> child = dataSnapshot.getChildren().iterator();
-
-                        while(child.hasNext()) {
-                            if(tvgetId.toString().equals(child.next().getKey())) {
-                                if(tvgetName.toString().equals(child.next().getKey()) == false){
-                                    Toast.makeText(JoinUs.this, "이미 등록된 아이디 입니다. 존재하는 아이디를 입력해주세요."
-                                            , Toast.LENGTH_LONG).show();
-                                    dbref.child("User").child("User").removeEventListener(this);
-                                }
-
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                }
-        );*/
+        
     }
 
     // textview에  default 이름 세팅하기
