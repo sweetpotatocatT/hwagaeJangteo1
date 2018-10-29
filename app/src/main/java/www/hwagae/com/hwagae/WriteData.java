@@ -3,6 +3,7 @@ package www.hwagae.com.hwagae;
 public class WriteData {
     private long key;
     private String id;
+    private String name;
     private long date;
     private String title;
     private String content;
@@ -13,9 +14,10 @@ public class WriteData {
     }
 
     // key, id, date 추가.
-    public WriteData(long key, String id, String title, String content, String price, long date, String isDelete) {
+    public WriteData(long key, String id, String name,String title, String content, String price, long date, String isDelete) {
         this.key = key;
         this.id = id;
+        this.name = name;
         this.title = title;
         this.content = content;
         this.price = price;
@@ -26,6 +28,14 @@ public class WriteData {
     // set
     public void setKey(long key) {
         this.key = key;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setId(String id) {

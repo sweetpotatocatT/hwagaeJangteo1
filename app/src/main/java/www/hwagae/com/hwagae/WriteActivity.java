@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.Profile;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -47,14 +48,14 @@ public class WriteActivity extends AppCompatActivity {
 
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
-
+    String Pid = Profile.getCurrentProfile().getId().toString();
     long key=0;
     private Uri imgUri, photoURI, albumURI,filePath;
     private String mCurrentPhotoPath;
     private String absoultePath;
     private int id_view;
     private EditText etItemname, etPrice, etContents;
-    private TextView tvItemname, tvPrice;
+    private TextView tvItemname, tvPrice,tvViewtime;
     private Button btnUpload, btnUpimg;
     private ImageView imgUpimg;
 
@@ -71,7 +72,7 @@ public class WriteActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
+        tvViewtime = findViewById(R.id.tvViewtime);
 
 
         etContents = findViewById(R.id.etContents);
@@ -108,18 +109,21 @@ public class WriteActivity extends AppCompatActivity {
 
                 Random rnd = new Random();
                 long key = date-rnd.nextInt();
-
+                String name = Profile.getCurrentProfile().getFirstName() + Profile.getCurrentProfile().getLastName();
                 date = -1 * date;
 
-                WriteData write = new WriteData(key, "temp_id", etItemname.getText().toString(),
+                WriteData write = new WriteData(key, Pid, name,etItemname.getText().toString(),
                         etContents.getText().toString(),
                         etPrice.getText().toString(), date, "true");
                 databaseReference.child("board").push().setValue(write);
 
                 Intent intent = new Intent(WriteActivity.this, ClickitemActivity.class);
+                intent.putExtra("id", Pid);
+                intent.putExtra("name", Profile.getCurrentProfile().getFirstName() + Profile.getCurrentProfile().getLastName());
                 intent.putExtra("content", etContents.getText().toString());
                 intent.putExtra("title", etItemname.getText().toString());
                 intent.putExtra("price", etPrice.getText().toString());
+                intent.putExtra("date", date);
                 startActivity(intent);
                 finish();
             }
@@ -176,79 +180,17 @@ public class WriteActivity extends AppCompatActivity {
 
     //**************★카메라에서 사진촬영 함수
     public void PhotoAction() {
-
+        Uri ImageCaptureUri;
         //촬영 후 이미지 가져옴
-        String state = Environment.getExternalStorageState();
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-        if(Environment.MEDIA_MOUNTED.equals(state)){
+        //?꾩떆濡??ъ슜???뚯씪??寃쎈줈?앹꽦
+        String url = "tmp_" + String.valueOf(System.currentTimeMillis()) + ".jpg";
+        ImageCaptureUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), url));
 
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, ImageCaptureUri);
+        startActivityForResult(intent, PICK_FROM_CAMERA);
 
-            if(intent.resolveActivity(getPackageManager())!=null){
-
-                File photoFile = null;
-
-                try{
-
-                    photoFile = createImageFile();
-
-                }catch (IOException e){
-
-                    e.printStackTrace();
-
-                }
-
-                if(photoFile!=null){
-
-                    Uri providerURI = FileProvider.getUriForFile(this,getPackageName(),photoFile);
-
-                    imgUri = providerURI;
-
-                    intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, providerURI);
-
-                    startActivityForResult(intent, PICK_FROM_CAMERA);
-
-                }
-
-            }
-
-        }else{
-
-            Log.v("알림", "저장공간에 접근 불가능");
-
-            return;
-
-        }
-
-    }
-
-    //카메라로 촬영한 이미지 생성
-    public File createImageFile() throws IOException{
-
-        String imgFileName = System.currentTimeMillis() + ".jpg";
-
-        File imageFile= null;
-
-        File storageDir = new File(Environment.getExternalStorageDirectory() + "/Pictures", "ireh");
-
-
-        if(!storageDir.exists()){
-
-            Log.v("알림","storageDir 존재 x " + storageDir.toString());
-
-            storageDir.mkdirs();
-
-        }
-
-        Log.v("알림","storageDir 존재함 " + storageDir.toString());
-
-        imageFile = new File(storageDir,imgFileName);
-
-        mCurrentPhotoPath = imageFile.getAbsolutePath();
-
-
-
-        return imageFile;
 
     }
 

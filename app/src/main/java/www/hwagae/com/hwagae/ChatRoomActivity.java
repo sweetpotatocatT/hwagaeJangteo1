@@ -22,6 +22,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+
 public class ChatRoomActivity extends AppCompatActivity {
 
     ListView lvChatlist;
@@ -69,13 +77,20 @@ public class ChatRoomActivity extends AppCompatActivity {
         // ChatActivity에 있는 PARTNER_NAME을 child의 이름으로 설정
 
         // 데이터 받아오기 및 어댑터 데이터 추가 및 삭제, 리스너 관리
-
         databaseReference.child("message").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 /*Log.d("LOG", "dataSnapshot.getKey() : " + dataSnapshot.getKey());*/
-                ChatData data = dataSnapshot.getValue(ChatData.class);
-                adapter.add(databaseReference.child("message").child(PARTNER_NAME).getKey());
+                Map<String, String> m = (HashMap<String, String>)dataSnapshot.getValue();
+                Collection<String> alMap = m.values();
+                Iterator<String> it = alMap.iterator();
+                Log.d("almap: ", dataSnapshot.child("-LPkI3dnBG_6C9483Dnk").getKey());
+                Log.d("RESULT VALUES:", databaseReference.child("message").child(alMap.iterator().toString()).getKey());
+                if(it.hasNext()) {
+                    adapter.add(databaseReference.child("message").child(alMap.iterator().toString()).getKey());
+                }
+                // DatabaseReference data = dataSnapshot.getValue(databaseReference.child("message"));
+                // adapter.add(databaseReference.child("message").getKey());
                 Log.d("LOG : " , "dataSnapshot.getChildren() : " + dataSnapshot.getChildren());
                 // adapter.add(dataSnapshot.getChildren().toString());
             }
@@ -120,7 +135,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                     .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
+                            adapter.remove("which");
                         }
                     })
                     .setNegativeButton("취소", new DialogInterface.OnClickListener() {

@@ -112,7 +112,7 @@ public class JoinUs extends AppCompatActivity {
 
             }
         });
-        
+
     }
 
     // textview에  default 이름 세팅하기

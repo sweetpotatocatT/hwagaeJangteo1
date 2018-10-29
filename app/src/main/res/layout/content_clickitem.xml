@@ -18,6 +18,33 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/com_facebook_auth_dialog_cancel_background" />
+    <TextView
+        android:id="@+id/tvViewUserName"
+        android:layout_width="277dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="4dp"
+        android:text="작성자이름"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvViewUserid" />
+    <TextView
+        android:id="@+id/tvViewUserid"
+        android:layout_width="277dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="4dp"
+        android:text="작성자아이디"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvViewtime" />
+    <TextView
+        android:id="@+id/tvViewtime"
+        android:layout_width="277dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="4dp"
+        android:text="작성일자"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgView" />
 
     <TextView
         android:id="@+id/tvViewName"
@@ -81,4 +108,18 @@
         app:layout_constraintHorizontal_bias="0.133"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvViewName" />
+    <TextView
+        android:id="@+id/tvDelete"
+        android:layout_width="241dp"
+        android:layout_height="27dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="100dp"
+        android:text="hh"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.15"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvViewName" />
+
 </android.support.constraint.ConstraintLayout>

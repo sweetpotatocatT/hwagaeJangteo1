@@ -147,25 +147,115 @@ public class ChatActivity extends AppCompatActivity {
         });
 
 
+        String Pid = Profile.getCurrentProfile().getId().toString();
+        SharedPreferences preferences1 = getSharedPreferences(Pid, MODE_PRIVATE);
+        String Addressinfo1 = preferences1.getString("Addressinfo", "");
+        String Accountinfo1 = preferences1.getString("Accountinfo", "");
+
+
+        String Bankinfo2 = preferences1.getString("Bankinfo1", "");
 
         // 계좌번호 전송
         rqBalance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                String Pid = Profile.getCurrentProfile().getId().toString();
+                SharedPreferences preferences1 = getSharedPreferences(Pid, MODE_PRIVATE);
+
                 // 내 정보 클래스에서 저장된 계좌번호가 없다면 계좌번호를 입력해달라는 Toast 넣기
                 Toast.makeText(ChatActivity.this, "계좌번호를 입력해주세요.",Toast.LENGTH_SHORT).show();
+                String Accountinfo1 = preferences1.getString("Accountinfo", "");
+
+
+                String Bankinfo2 = preferences1.getString("Bankinfo1", "");
+                MypageData Bank = new MypageData( Accountinfo1,Bankinfo2);
+                databaseReference.child("mypage").push().setValue(Bank);
+
+
+
             }
         });
+        databaseReference.child("mypage").addChildEventListener(new ChildEventListener() {
+            // Child 값 넣는 메소드
+            // Child : 데이터베이스에서 하위 항목들
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String Pid = Profile.getCurrentProfile().getId().toString();
+                MypageData mypageData = dataSnapshot.getValue(MypageData.class);
+                adapter.add(Pid+"계좌정보:"+mypageData.getBankinfo2() +"," + mypageData.getAccountinfo1());
+                // addMessage(dataSnapshot, adapter);
+            }
 
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                ChatData chatData = dataSnapshot.getValue(ChatData.class);
+                adapter.remove(chatData.getUserName() + " : " + chatData.getMessage());
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         // 주소 전송
         rqAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 내 정보 클래스에서 저장된 주소가 없다면 주소를 입력해달라는 Toast 넣기
                 Toast.makeText(ChatActivity.this, "주소를 입력해주세요.",Toast.LENGTH_SHORT).show();
+                String Pid = Profile.getCurrentProfile().getId().toString();
+                SharedPreferences preferences1 = getSharedPreferences(Pid, MODE_PRIVATE);
+                String Addressinfo1 = preferences1.getString("Addressinfo", "");
+
+
+
+                AddressData Address = new AddressData( Addressinfo1);
+                databaseReference.child("Address").push().setValue(Address);
             }
         });
+        databaseReference.child("Address").addChildEventListener(new ChildEventListener() {
+            // Child 값 넣는 메소드
+            // Child : 데이터베이스에서 하위 항목들
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                AddressData addressData = dataSnapshot.getValue(AddressData.class);
+                String Pid = Profile.getCurrentProfile().getId().toString();
+                adapter.add(Pid+"주소정보:"+addressData.getAddressinfo1());
+                // addMessage(dataSnapshot, adapter);
+            }
 
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                ChatData chatData = dataSnapshot.getValue(ChatData.class);
+                adapter.remove(chatData.getUserName() + " : " + chatData.getMessage());
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         // 거래 완료
         rqFinish.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,7 +277,7 @@ public class ChatActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 // 취소 버튼 클릭시 설정
-                                    dialog.cancel();
+                                dialog.cancel();
                             }
                         });
                 // 다이얼로그 생성
